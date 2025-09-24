@@ -1,4 +1,4 @@
-import type { Course } from '../types/Course.tsx';
+import type { Course } from '../types/Course.ts';
 
 interface CourseCardProps {
   course: Course;

@@ -1,4 +1,4 @@
-import type { Course } from '../types/Course.tsx';
+import type { Course } from '../types/Course.ts';
 import CourseCard from './CourseCard.tsx'
 
 interface CourseListProps {
