@@ -1,6 +1,7 @@
 // import { useState } from 'react'
 import Banner from './components/Banner.tsx'
 import CourseList from './components/CourseList.tsx'
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const schedule = {
   title: "CS Courses for 2025-2026",
@@ -28,13 +29,13 @@ const schedule = {
       "number": "314",
       "meets" : "TuTh 9:30-10:50",
       "title" : "Tech & Human Interaction"
-    }
+    },
   }
 };
 
 const App = () => {
   return (
-    <div>
+    <div className="container">
       <Banner title={schedule.title} />
       <CourseList courses={schedule.courses} />
     </div>

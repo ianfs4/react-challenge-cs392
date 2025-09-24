@@ -1,20 +1,14 @@
-interface Course {
-  term: string;
-  number: string;
-  meets: string;
-  title: string;
-}
+import type { Course } from '../types/Course.tsx';
+import CourseCard from './CourseCard.tsx'
 
 interface CourseListProps {
   courses: {[key: string] : Course};
 }
 
 const CourseList = ({courses}: CourseListProps) => (
-  <div>
+  <div className="grid grid-cols-[repeat(auto-fill,minmax(16rem,1fr))] gap-4">
     {Object.values(courses).map((course) => (
-      <p>
-        {course.term} CS {course.number}: {course.title}
-      </p>
+      <CourseCard key={`${course.term}${course.number}`} course={course} />
     ))}
   </div>
 )
