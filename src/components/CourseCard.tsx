@@ -17,6 +17,6 @@ const CourseCard = ({course}: CourseCardProps) => (
       Meets: {course.meets}
     </div>
   </div>
-)
+);
 
 export default CourseCard;

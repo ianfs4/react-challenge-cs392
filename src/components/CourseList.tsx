@@ -2,7 +2,7 @@ import type { Course } from '../types/Course.ts';
 import CourseCard from './CourseCard.tsx'
 
 interface CourseListProps {
-  courses: {[key: string] : Course};
+  courses: Course[];
 }
 
 const CourseList = ({courses}: CourseListProps) => (
@@ -11,6 +11,6 @@ const CourseList = ({courses}: CourseListProps) => (
       <CourseCard key={`${course.term}${course.number}`} course={course} />
     ))}
   </div>
-)
+);
 
 export default CourseList;
