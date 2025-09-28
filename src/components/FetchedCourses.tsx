@@ -6,9 +6,11 @@ import TermPage from './TermPage.tsx';
 interface FetchedCoursesProps {
   activeTerm: string;
   setActiveTerm: (term: string) => void;
+  toggleCourse: (course: Course) => void;
+  selectedCourses: Course[];
 }
 
-const FetchedCourses = ({ activeTerm, setActiveTerm }: FetchedCoursesProps) => {
+const FetchedCourses = ({ activeTerm, setActiveTerm, toggleCourse, selectedCourses }: FetchedCoursesProps) => {
   const [data, isLoading, error] = useJsonQuery(
     'https://courses.cs.northwestern.edu/394/guides/data/cs-courses.php'
   );
@@ -17,7 +19,10 @@ const FetchedCourses = ({ activeTerm, setActiveTerm }: FetchedCoursesProps) => {
   if (isLoading) return <h1>Loading user data...</h1>;
   if (!data) return <h1>No user data found</h1>;
 
-  const coursesArray = Object.values(data.courses) as Course[];
+  const coursesArray = Object.entries(data.courses).map(([key, course]) => ({
+    key,
+    ...(course as Omit<Course, 'key'>),
+  }));
 
   return (
     <div>
@@ -26,6 +31,8 @@ const FetchedCourses = ({ activeTerm, setActiveTerm }: FetchedCoursesProps) => {
         activeTerm={activeTerm}
         setActiveTerm={setActiveTerm}
         courses={coursesArray.filter((course) => course.term === activeTerm)}
+        toggleCourse={toggleCourse}
+        selectedCourses={selectedCourses}
       />
     </div>
   );

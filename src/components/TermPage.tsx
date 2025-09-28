@@ -6,13 +6,19 @@ interface TermPageProps{
   activeTerm: string;
   setActiveTerm: (term: string) => void;
   courses: Course[];
+  toggleCourse: (course: Course) => void;
+  selectedCourses: Course[];
 }
 
-const TermPage = ({ activeTerm, setActiveTerm, courses}: TermPageProps) => {
+const TermPage = ({ activeTerm, setActiveTerm, courses, toggleCourse, selectedCourses}: TermPageProps) => {
   return (
     <div>
       <TermSelector activeTerm={activeTerm} setActiveTerm={setActiveTerm} />
-      <CourseList courses={courses}/>
+      <CourseList
+        courses={courses}
+        toggleCourse={toggleCourse}
+        selectedCourses={selectedCourses}
+      />
     </div>
   )
 }
