@@ -8,9 +8,11 @@ interface FetchedCoursesProps {
   setActiveTerm: (term: string) => void;
   toggleCourse: (course: Course) => void;
   selectedCourses: Course[];
+  showCoursePlan: boolean;
+  setshowCoursePlan: (showCoursePlan: boolean) => void;
 }
 
-const FetchedCourses = ({ activeTerm, setActiveTerm, toggleCourse, selectedCourses }: FetchedCoursesProps) => {
+const FetchedCourses = ({ activeTerm, setActiveTerm, toggleCourse, selectedCourses, showCoursePlan, setshowCoursePlan }: FetchedCoursesProps) => {
   const [data, isLoading, error] = useJsonQuery(
     'https://courses.cs.northwestern.edu/394/guides/data/cs-courses.php'
   );
@@ -33,6 +35,8 @@ const FetchedCourses = ({ activeTerm, setActiveTerm, toggleCourse, selectedCours
         courses={coursesArray.filter((course) => course.term === activeTerm)}
         toggleCourse={toggleCourse}
         selectedCourses={selectedCourses}
+        showCoursePlan={showCoursePlan}
+        setshowCoursePlan={setshowCoursePlan}
       />
     </div>
   );

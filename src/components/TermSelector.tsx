@@ -6,7 +6,7 @@ interface TermSelectorProps {
 const TermSelector = ({ activeTerm, setActiveTerm }: TermSelectorProps) => {
   const terms = ["Fall", "Winter", "Spring"];
   return (
-    <div className="flex gap-4 my-4">
+    <div className="flex gap-4">
       {terms.map((term) => (
         <button
           key={term}
