@@ -1,4 +1,5 @@
 import type { Course } from '../types/Course.ts';
+import { hasConflictWithSelected } from '../utilities/timeConflicts.ts';
 
 interface CourseCardProps {
   course: Course;
@@ -9,12 +10,16 @@ interface CourseCardProps {
 const CourseCard = ({course, toggleCourse, selectedCourses}: CourseCardProps) => {
   const isSelected = selectedCourses.some(selected => selected.number === course.number && selected.term === course.term);
 
+  const hasConflict = hasConflictWithSelected({ course, selectedCourses} )
+
   return (
     <div
-      className={`m-1 p-6 rounded shadow cursor-pointer ${
-        isSelected ? 'bg-green-200 border-2 border-green-500' : 'bg-white border'
+      className={`m-1 p-6 rounded shadow border-2 ${
+        isSelected ? 'bg-green-200 border-green-500 cursor-pointer' :
+        hasConflict ? 'bg-gray-300 cursor-not-allowed opacity-50 border-gray-400' :
+        'bg-white border cursor-pointer border-gray-300'
       }`}
-      onClick={() => toggleCourse(course)}
+      onClick={() => {if(!hasConflict || isSelected) toggleCourse(course)}}
     >
       <div className="text-xl font-semibold mb-2">
         {course.term} CS {course.number}

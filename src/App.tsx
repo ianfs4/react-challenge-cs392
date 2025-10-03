@@ -25,6 +25,7 @@ const App = () => {
 
   const toggleCourse = (course: Course) => {
     setSelectedCourses(selected => toggleSelectedCourse(course, selected));
+    console.log(selectedCourses);
   }
 
   return (
