@@ -7,8 +7,8 @@ interface hasConflictWithSelectedProps {
 
 type MeetingTime = {
   days: string[];
-  start: string;
-  end: string;
+  start: number;
+  end: number;
 };
 
 export const hasConflictWithSelected = ({course, selectedCourses}: hasConflictWithSelectedProps): boolean => {
@@ -38,10 +38,10 @@ const daysConflict = (days1: string[], days2: string[]): boolean => days1.some((
   days2.includes(item))
 
 const timesConflict = (
-  start1: string,
-  end1: string,
-  start2: string,
-  end2: string
+  start1: number,
+  end1: number,
+  start2: number,
+  end2: number
 ): boolean => start1 < end2 && end1 > start2;
 
 /** 
@@ -80,4 +80,12 @@ const parseDays = (dayString: string): string[] => {
   return days;
 }
 
-const parseTime = (timeString: string): string[] => timeString.split('-');
+const parseTime = (timeString: string): [number, number] => {
+  const [start, end] = timeString.split('-');
+  return [timeToMinutes(start), timeToMinutes(end)];
+}
+
+const timeToMinutes = (time: string): number => {
+  const [hours, minutes] = time.split(':').map(Number);
+  return hours * 60 + minutes;
+}

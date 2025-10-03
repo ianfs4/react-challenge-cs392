@@ -1,10 +1,11 @@
+import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import SelectedCourses from './components/SelectedCourses.tsx';
-import FetchedCourses from './components/FetchedCourses.tsx';
-import ScheduleModal from './components/CoursePlanModal.tsx';
-import type { Course } from './types/Course.ts';
+import SelectedCourses from '../components/SelectedCourses.tsx';
+import FetchedCourses from '../components/FetchedCourses.tsx';
+import ScheduleModal from '../components/CoursePlanModal.tsx';
+import type { Course } from '../types/Course.ts';
 
 const toggleSelectedCourse = (x: Course, lst: Course[]): Course[] => {
   const isSelected = lst.some(course => 
@@ -18,14 +19,13 @@ const toggleSelectedCourse = (x: Course, lst: Course[]): Course[] => {
 
 const queryClient = new QueryClient();
 
-const App = () => {
+const Index = () => {
   const [activeTerm, setActiveTerm ] = useState("Fall");
   const [selectedCourses, setSelectedCourses] = useState<Course[]>([]);
   const [showCoursePlan, setshowCoursePlan] = useState(false);
 
   const toggleCourse = (course: Course) => {
     setSelectedCourses(selected => toggleSelectedCourse(course, selected));
-    console.log(selectedCourses);
   }
 
   return (
@@ -52,4 +52,6 @@ const App = () => {
   )
 }
 
-export default App;
+export const Route = createFileRoute('/')({
+  component: Index,
+});

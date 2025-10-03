@@ -4,7 +4,7 @@ interface TermSelectorProps {
 }
 
 const TermSelector = ({ activeTerm, setActiveTerm }: TermSelectorProps) => {
-  const terms = ["Fall", "Winter", "Spring"];
+  const terms = ["Fall", "Winter", "Spring", "Summer"];
   return (
     <div className="flex gap-4">
       {terms.map((term) => (

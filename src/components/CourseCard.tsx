@@ -1,3 +1,4 @@
+import { useNavigate } from '@tanstack/react-router';
 import type { Course } from '../types/Course.ts';
 import { hasConflictWithSelected } from '../utilities/timeConflicts.ts';
 
@@ -8,9 +9,14 @@ interface CourseCardProps {
 }
 
 const CourseCard = ({course, toggleCourse, selectedCourses}: CourseCardProps) => {
+  const navigate = useNavigate();
   const isSelected = selectedCourses.some(selected => selected.number === course.number && selected.term === course.term);
+  const hasConflict = hasConflictWithSelected({ course, selectedCourses} );
 
-  const hasConflict = hasConflictWithSelected({ course, selectedCourses} )
+  const handleEditClick = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent the card's onClick from firing
+    navigate({ to: '/form', search: { course: course } }); // Add leading slash
+  };
 
   return (
     <div
@@ -31,6 +37,12 @@ const CourseCard = ({course, toggleCourse, selectedCourses}: CourseCardProps) =>
       <div className="text-sm">
         Meets: {course.meets}
       </div>
+      <button
+        onClick={handleEditClick}
+        className="mt-3 px-4 py-2 rounded-lg border border-gray-300 text-gray-700 font-medium hover:bg-gray-200 transition"
+      >
+        Edit Course
+      </button>
     </div>
   );
 };
