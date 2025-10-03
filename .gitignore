@@ -1,8 +1,6 @@
 # Created by https://www.toptal.com/developers/gitignore/api/visualstudiocode,react,firebase,macos,windows,node
 # Edit at https://www.toptal.com/developers/gitignore?templates=visualstudiocode,react,firebase,macos,windows,node
 
-oldApp.tsx
-
 ### Firebase ###
 .idea
 **/node_modules/*
