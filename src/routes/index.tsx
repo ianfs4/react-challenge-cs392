@@ -9,13 +9,13 @@ import type { Course } from '../types/Course.ts';
 
 const toggleSelectedCourse = (x: Course, lst: Course[]): Course[] => {
   const isSelected = lst.some((course) => {
-    if (course.id && x.id) return course.id === x.id;
+    if (course.key && x.key) return course.key === x.key;
     return course.term === x.term && course.number === x.number && course.meets === x.meets;
   });
 
   if (isSelected) {
     return lst.filter((course) => {
-      if (course.id && x.id) return course.id !== x.id;
+      if (course.key && x.key) return course.key !== x.key;
       return !(course.term === x.term && course.number === x.number && course.meets === x.meets);
     });
   }

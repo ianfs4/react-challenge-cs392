@@ -1,4 +1,4 @@
-import { useJsonQuery } from '../../utilities/fetchData.ts';
+import { useDataQuery } from '../../utilities/firebase.ts';
 import type { Course } from '../../types/Course.ts';
 import Banner from './Banner.tsx';
 import TermPage from './TermPage.tsx';
@@ -13,9 +13,7 @@ interface FetchedCoursesProps {
 }
 
 const FetchedCourses = ({ activeTerm, setActiveTerm, toggleCourse, selectedCourses, showCoursePlan, setshowCoursePlan }: FetchedCoursesProps) => {
-  const [data, isLoading, error] = useJsonQuery(
-    'https://courses.cs.northwestern.edu/394/guides/data/cs-courses.php'
-  );
+  const [data, isLoading, error] = useDataQuery('/');
 
   if (error) return <h1>Error loading user data: {`${error}`}</h1>;
   if (isLoading) return <h1>Loading user data...</h1>;
