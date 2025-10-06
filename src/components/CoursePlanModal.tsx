@@ -35,7 +35,7 @@ const CoursePlanModal = ({ selectedCourses, toggleCourse, isOpen, onClose }: Cou
                   <div className="flex flex-col gap-2">
                     {courses.map((course) => (
                       <button 
-                        key={`${course.term}-${course.number}`}
+                        key={`${course.id ?? `${course.term}-${course.number}`}`}
                         onClick={() => toggleCourse(course)}
                         className="p-3 bg-gray-100 hover:bg-gray-300 rounded"
                       >

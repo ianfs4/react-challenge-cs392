@@ -1,7 +1,7 @@
 import TermSelector from './TermSelector.tsx';
-import CoursePlanButton from './CoursePlanButton.tsx';
-import type { Course } from '../types/Course.ts';
-import CourseList from './CourseList.tsx';
+import CoursePlanButton from '../CoursePlanButton.tsx';
+import type { Course } from '../../types/Course.ts';
+import CourseList from '../CourseList.tsx';
 
 interface TermPageProps{
   activeTerm: string;

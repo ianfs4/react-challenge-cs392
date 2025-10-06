@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
-import CourseForm from '../components/CourseForm.tsx';
+import CourseForm from '../components/CourseForm/CourseForm.tsx';
 import type { Course } from '../types/Course.ts';
 
 type FormSearch = {
@@ -24,9 +24,18 @@ function RouteComponent() {
     navigate({ to: '/' });
   };
 
+  const handleSubmit = (data: Course) => {
+    console.log("Course data submitted: ", data);
+    navigate({ to: '/' });
+  };
+
   return (
     <div>
-      <CourseForm course={course} onCancel={ () => {handleCancel()} }/>
+      <CourseForm
+        course={course}
+        onCancel={ handleCancel }
+        onSubmit={ handleSubmit }
+      />
     </div>
   );
 }

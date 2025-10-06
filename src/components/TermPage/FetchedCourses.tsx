@@ -1,5 +1,5 @@
-import { useJsonQuery } from '../utilities/fetchData.ts';
-import type { Course } from '../types/Course.tsx';
+import { useJsonQuery } from '../../utilities/fetchData.ts';
+import type { Course } from '../../types/Course.ts';
 import Banner from './Banner.tsx';
 import TermPage from './TermPage.tsx';
 
@@ -21,10 +21,14 @@ const FetchedCourses = ({ activeTerm, setActiveTerm, toggleCourse, selectedCours
   if (isLoading) return <h1>Loading user data...</h1>;
   if (!data) return <h1>No user data found</h1>;
 
-  const coursesArray = Object.entries(data.courses).map(([key, course]) => ({
-    key,
-    ...(course as Omit<Course, 'key'>),
-  }));
+  const coursesArray = Object.entries(data.courses).map(([_, course]) => {
+    const mapped = course as Course;
+    const id = `${mapped.term}-${mapped.number}`;
+    return {
+      id,
+      ...mapped,
+    } as Course & { id: string };
+  });
 
   return (
     <div>

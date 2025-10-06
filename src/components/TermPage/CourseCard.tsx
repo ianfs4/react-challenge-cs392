@@ -1,6 +1,6 @@
 import { useNavigate } from '@tanstack/react-router';
-import type { Course } from '../types/Course.ts';
-import { hasConflictWithSelected } from '../utilities/timeConflicts.ts';
+import type { Course } from '../../types/Course.ts';
+import { hasConflictWithSelected } from '../../utilities/timeConflicts.ts';
 
 interface CourseCardProps {
   course: Course;
@@ -39,7 +39,10 @@ const CourseCard = ({course, toggleCourse, selectedCourses}: CourseCardProps) =>
       </div>
       <button
         onClick={handleEditClick}
-        className="mt-3 px-4 py-2 rounded-lg border border-gray-300 text-gray-700 font-medium hover:bg-gray-200 transition"
+        className={
+          `mt-3 px-4 py-2 rounded-lg border text-gray-700 hover:bg-gray-200 font-medium transition border-gray-300
+          ${isSelected ? 'bg-green-50' : ''}`
+        }
       >
         Edit Course
       </button>
