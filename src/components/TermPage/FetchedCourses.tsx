@@ -19,15 +19,11 @@ const FetchedCourses = ({ activeTerm, setActiveTerm, toggleCourse, selectedCours
   if (isLoading) return <h1>Loading user data...</h1>;
   if (!data) return <h1>No user data found</h1>;
 
-  const coursesArray = Object.entries(data.courses).map(([_, course]) => {
-    const mapped = course as Course;
-    const id = `${mapped.term}-${mapped.number}`;
-    return {
-      id,
-      ...mapped,
-    } as Course & { id: string };
+  const coursesObject = data.courses || {};
+  const coursesArray = Object.entries(coursesObject).map(([key, course]) => {
+    return ({ key, ...(course as any) } as Course);
   });
-
+  
   return (
     <div>
       <Banner title={data.title} />

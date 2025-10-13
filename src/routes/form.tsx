@@ -1,6 +1,7 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import CourseForm from '../components/CourseForm/CourseForm.tsx';
 import type { Course } from '../types/Course.ts';
+import { getDatabase, ref, update } from 'firebase/database';
 
 type FormSearch = {
   course: Course;
@@ -18,15 +19,37 @@ export const Route = createFileRoute('/form')({
 function RouteComponent() {
   const navigate = useNavigate();
   const searchParams = Route.useSearch();
-  const course = searchParams.course
+  const course = searchParams.course;
+
+  if (!course) {
+    console.log("No course found.");
+    navigate({ to: '/' });
+  }
 
   const handleCancel = () => {
     navigate({ to: '/' });
   };
 
-  const handleSubmit = (data: Course) => {
-    console.log("Course data submitted: ", data);
-    navigate({ to: '/' });
+  const handleSubmit = async (data: Course, isDirty: boolean) => {
+    if (!course.key) {
+      throw new Error("Missing course key - cannot save.");
+    }
+    if (!data) {
+      throw new Error("Empty or missing data - cannot save.");
+    }
+    if (!isDirty) {
+      throw new Error("No changes made - skipping saving.");
+    }
+    try {
+      const database = getDatabase();
+      const { term, number, meets, title } = data;
+      await update(ref(database, `/courses/${course.key}`), { term, number, meets, title });
+      console.log("Course data submitted: ", data);
+      navigate({ to: '/' });
+    } catch (err) {
+      console.error('Failed to save course: ', err);
+      throw err;
+    }
   };
 
   return (

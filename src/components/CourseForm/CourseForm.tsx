@@ -1,33 +1,45 @@
 import { useForm } from 'react-hook-form'
 import { courseResolver, type Course } from '../../types/Course.ts';
+import { useState } from 'react'
 
 interface CourseFormProps {
-  course?: Course;
+  course: Course;
   onCancel: () => void;
-  onSubmit: (data: Course) => void;
+  onSubmit: (data: Course, isDirty: boolean) => Promise<void>;
 }
 
 const CourseForm = ({ course, onCancel, onSubmit }: CourseFormProps) => {
+  const [ submitError, setSubmitError ] = useState<string>('');
 
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting }
+    formState: { errors, isSubmitting, isDirty }
   } = useForm<Course>({
-    defaultValues: course || {
-      term: undefined,  // typescript wasn't happy with empty string here
-      number: '',
-      title: '',
-      meets: ''
-    },
+    defaultValues: course ? {
+      key: course.key,
+      term: course.term,
+      number: course.number,
+      title: course.title,
+      meets: course.meets
+    } : undefined,
     mode: 'onChange',
     resolver: courseResolver 
   });
 
-  const onFormSubmit = (data: Course) => {
+  // useEffect(() => {
+  //   console.log('CourseForm state:', { errors, isDirty, isSubmitting });
+  // }, [errors, isDirty, isSubmitting]);
+
+
+  const onFormSubmit = async (data: Course) => {
     console.log('Form submitted: ', data);
-    if (onSubmit) {
-      onSubmit(data);
+    try {
+      if (onSubmit) {
+        await onSubmit(data, isDirty);
+      }
+    } catch (error) {
+      setSubmitError(error instanceof Error ? error.message : "Failed to save course data");
     }
   };
 
@@ -35,7 +47,14 @@ const CourseForm = ({ course, onCancel, onSubmit }: CourseFormProps) => {
     <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-md">
       <h2 className="text-2xl font-bold mb-6">Edit Course</h2>
       
-      <form onSubmit={handleSubmit(onFormSubmit)} className="space-y-4">
+      <form
+        onSubmit={handleSubmit(onFormSubmit)}
+        // onSubmitCapture={() => console.log('onSubmitCapture fired')}
+        className="space-y-4"
+      >
+        {/* include firebase key so Zod/resolver validation succeeds */}
+        <input type="hidden" {...register('key')} />
+
         <label className="block">
           <span className="text-sm font-semibold text-gray-700">Term</span>
           <input
@@ -103,12 +122,19 @@ const CourseForm = ({ course, onCancel, onSubmit }: CourseFormProps) => {
           <button
             type="submit"
             disabled={isSubmitting}
+            onClick={() => console.log('submit button clicked')}
             className="px-4 py-2 rounded-lg bg-blue-500 text-white font-medium hover:bg-blue-600 disabled:bg-gray-400 transition"
           >
             {isSubmitting ? 'Submitting...' : 'Submit'}
           </button>
         </div>
       </form>
+
+      {submitError && (
+        <div className="mt-4 text-red-600 font-medium">
+          {submitError}
+        </div>
+      )}
     </div>
   );
 };

@@ -2,7 +2,7 @@ import * as z from 'zod';
 import { zodResolver } from "@hookform/resolvers/zod";
 
 const Course = z.object({
-  key: z.string().optional(),
+  key: z.string(),
   term: z.enum(['Fall', 'Winter', 'Spring', 'Summer'], {
     message: 'Term must be Fall, Winter, Spring, or Summer'
   }),
