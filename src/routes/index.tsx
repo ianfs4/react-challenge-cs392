@@ -4,7 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import SelectedCourses from '../components/SelectedCourses.tsx';
 import FetchedCourses from '../components/TermPage/FetchedCourses.tsx';
-import ScheduleModal from '../components/CoursePlanModal.tsx';
+import ScheduleModal from '../components/TermPage/CoursePlanModal.tsx';
 import type { Course } from '../types/Course.ts';
 
 const toggleSelectedCourse = (x: Course, lst: Course[]): Course[] => {

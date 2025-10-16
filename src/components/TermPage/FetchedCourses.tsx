@@ -1,6 +1,5 @@
 import { useDataQuery } from '../../utilities/firebase.ts';
 import type { Course } from '../../types/Course.ts';
-import Banner from './Banner.tsx';
 import TermPage from './TermPage.tsx';
 
 interface FetchedCoursesProps {
@@ -26,7 +25,7 @@ const FetchedCourses = ({ activeTerm, setActiveTerm, toggleCourse, selectedCours
   
   return (
     <div>
-      <Banner title={data.title} />
+      <h1 className="my-3">{data.title}</h1>
       <TermPage
         activeTerm={activeTerm}
         setActiveTerm={setActiveTerm}

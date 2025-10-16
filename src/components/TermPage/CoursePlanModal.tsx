@@ -1,5 +1,5 @@
-import type { Course } from '../types/Course.ts';
-import Modal from './Modal.tsx';
+import type { Course } from '../../types/Course.ts';
+import Modal from '../Modal.tsx';
 
 interface CoursePlanModalProps {
   selectedCourses: Course[];

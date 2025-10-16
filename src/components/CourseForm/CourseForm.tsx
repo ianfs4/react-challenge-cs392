@@ -1,6 +1,7 @@
 import { useForm } from 'react-hook-form'
 import { courseResolver, type Course } from '../../types/Course.ts';
 import { useState } from 'react'
+import { useAuthState } from '../../utilities/firebase.ts';
 
 interface CourseFormProps {
   course: Course;
@@ -10,6 +11,7 @@ interface CourseFormProps {
 
 const CourseForm = ({ course, onCancel, onSubmit }: CourseFormProps) => {
   const [ submitError, setSubmitError ] = useState<string>('');
+  const { isAuthenticated } = useAuthState();
 
   const {
     register,
@@ -121,7 +123,7 @@ const CourseForm = ({ course, onCancel, onSubmit }: CourseFormProps) => {
           </button>
           <button
             type="submit"
-            disabled={isSubmitting}
+            disabled={isSubmitting || !isAuthenticated}
             onClick={() => console.log('submit button clicked')}
             className="px-4 py-2 rounded-lg bg-blue-500 text-white font-medium hover:bg-blue-600 disabled:bg-gray-400 transition"
           >
@@ -129,6 +131,12 @@ const CourseForm = ({ course, onCancel, onSubmit }: CourseFormProps) => {
           </button>
         </div>
       </form>
+
+      {!isAuthenticated && (
+        <div className="mt-4 italic text-gray-600 font-medium">
+          Must be authenticated user to edit courses.
+        </div>
+      )}
 
       {submitError && (
         <div className="mt-4 text-red-600 font-medium">

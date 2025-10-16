@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
+import { flushSync } from 'react-dom'
 import { initializeApp } from "firebase/app";
 import { getDatabase, onValue, ref } from 'firebase/database';
+import { getAuth, GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signOut, type NextOrObserver, type User} from 'firebase/auth';
 import type { Course } from '../types/Course.ts';
 
 interface FirebaseData {
@@ -24,6 +26,7 @@ const firebaseConfig = {
 // Initialize Firebase
 const firebase = initializeApp(firebaseConfig);
 const database = getDatabase(firebase);
+const auth = getAuth(firebase);
 
 export const useDataQuery = (path: string): [FirebaseData | undefined, boolean, Error | undefined] => {
   const [data, setData] = useState();
@@ -45,4 +48,37 @@ export const useDataQuery = (path: string): [FirebaseData | undefined, boolean, 
   }, [ path ]);
 
   return [ data, loading, error ];
+};
+
+export const signInWithGoogle = () => {
+  signInWithPopup(auth, new GoogleAuthProvider());
+};
+
+const firebaseSignOut = () => signOut(auth);
+
+export { firebaseSignOut as signOut };
+
+export interface AuthState {
+  user: User | null,
+  isAuthenticated: boolean,
+  isInitialLoading: boolean
+}
+
+export const addAuthStateListener = (fn: NextOrObserver<User>) => (
+  onAuthStateChanged(auth, fn)
+);
+
+export const useAuthState = (): AuthState => {
+  const [user, setUser] = useState(auth.currentUser)
+  const [isInitialLoading, setIsInitialLoading] = useState(true)
+  const isAuthenticated = !!user;
+
+  useEffect(() => addAuthStateListener((user: User | null) => {
+      flushSync(() => {
+        setUser(user);
+        setIsInitialLoading(false);
+      })
+    }), [])
+
+  return { user, isAuthenticated, isInitialLoading };
 };

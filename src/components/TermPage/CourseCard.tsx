@@ -1,6 +1,7 @@
 import { useNavigate } from '@tanstack/react-router';
 import type { Course } from '../../types/Course.ts';
 import { hasConflictWithSelected } from '../../utilities/timeConflicts.ts';
+import { useAuthState } from '../../utilities/firebase.ts';
 
 interface CourseCardProps {
   course: Course;
@@ -12,6 +13,7 @@ const CourseCard = ({course, toggleCourse, selectedCourses}: CourseCardProps) =>
   const navigate = useNavigate();
   const isSelected = selectedCourses.some(selected => selected.number === course.number && selected.term === course.term);
   const hasConflict = hasConflictWithSelected({ course, selectedCourses} );
+  const { isAuthenticated } = useAuthState();
 
   const handleEditClick = (e: React.MouseEvent) => {
     e.stopPropagation(); // Prevent the card's onClick from firing
@@ -37,15 +39,17 @@ const CourseCard = ({course, toggleCourse, selectedCourses}: CourseCardProps) =>
       <div className="text-sm">
         Meets: {course.meets}
       </div>
-      <button
-        onClick={handleEditClick}
-        className={
-          `mt-3 px-4 py-2 rounded-lg border text-gray-700 hover:bg-gray-200 font-medium transition border-gray-300
-          ${isSelected ? 'bg-green-50' : ''}`
-        }
-      >
-        Edit Course
-      </button>
+      {isAuthenticated &&
+        <button
+          onClick={handleEditClick}
+          className={
+            `mt-3 px-4 py-2 rounded-lg border text-gray-700 hover:bg-gray-200 font-medium transition border-gray-300
+            ${isSelected ? 'bg-green-50' : ''}`
+          }
+        >
+          Edit Course
+        </button>
+      }
     </div>
   );
 };

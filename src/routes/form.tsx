@@ -53,7 +53,7 @@ function RouteComponent() {
   };
 
   return (
-    <div>
+    <div className="container pt-10 flex justify-center">
       <CourseForm
         course={course}
         onCancel={ handleCancel }

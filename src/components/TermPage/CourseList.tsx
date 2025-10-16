@@ -1,5 +1,5 @@
-import type { Course } from '../types/Course.ts';
-import CourseCard from './TermPage/CourseCard.tsx'
+import type { Course } from '../../types/Course.ts';
+import CourseCard from './CourseCard.tsx'
 
 interface CourseListProps {
   courses: Course[];
