@@ -1,8 +1,16 @@
 {
   "rules": {
+    ".read": true,
+    ".write": "auth !== null && root.child('admins').child(auth.uid).exists()",
     "posts": {
       ".read": true,
-      ".write": "auth !== null"
+      ".write": "auth != null"
+    },
+    "users": {
+      "$uid": {
+        ".read": "auth != null && auth.uid == $uid",
+        ".write": "auth != null && auth.uid == $uid"
+      }
     }
   }
 }

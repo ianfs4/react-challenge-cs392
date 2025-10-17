@@ -1,7 +1,7 @@
 import { useNavigate } from '@tanstack/react-router';
 import type { Course } from '../../types/Course.ts';
 import { hasConflictWithSelected } from '../../utilities/timeConflicts.ts';
-import { useAuthState } from '../../utilities/firebase.ts';
+import { useProfile } from '../../utilities/profile.ts';
 
 interface CourseCardProps {
   course: Course;
@@ -13,7 +13,14 @@ const CourseCard = ({course, toggleCourse, selectedCourses}: CourseCardProps) =>
   const navigate = useNavigate();
   const isSelected = selectedCourses.some(selected => selected.number === course.number && selected.term === course.term);
   const hasConflict = hasConflictWithSelected({ course, selectedCourses} );
-  const { isAuthenticated } = useAuthState();
+  const [ profile, profileLoading, profileError ] = useProfile();
+
+  if (profileError) return <h1>Error loading profile: {`${profileError}`}</h1>;
+  if (profileLoading) return <h1>Loading user profile</h1>;
+  if (!profile) return <h1>No profile data</h1>;
+  if (typeof profile !== 'object' || profile instanceof Error) {
+    return <h1>Invalid profile data</h1>;
+  }
 
   const handleEditClick = (e: React.MouseEvent) => {
     e.stopPropagation(); // Prevent the card's onClick from firing
@@ -39,7 +46,7 @@ const CourseCard = ({course, toggleCourse, selectedCourses}: CourseCardProps) =>
       <div className="text-sm">
         Meets: {course.meets}
       </div>
-      {isAuthenticated &&
+      {profile.isAdmin &&
         <button
           onClick={handleEditClick}
           className={

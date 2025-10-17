@@ -1,7 +1,7 @@
 import { useForm } from 'react-hook-form'
 import { courseResolver, type Course } from '../../types/Course.ts';
 import { useState } from 'react'
-import { useAuthState } from '../../utilities/firebase.ts';
+import { useProfile } from '../../utilities/profile.ts';
 
 interface CourseFormProps {
   course: Course;
@@ -11,7 +11,7 @@ interface CourseFormProps {
 
 const CourseForm = ({ course, onCancel, onSubmit }: CourseFormProps) => {
   const [ submitError, setSubmitError ] = useState<string>('');
-  const { isAuthenticated } = useAuthState();
+  const [ profile, profileLoading, profileError ] = useProfile();
 
   const {
     register,
@@ -28,6 +28,13 @@ const CourseForm = ({ course, onCancel, onSubmit }: CourseFormProps) => {
     mode: 'onChange',
     resolver: courseResolver 
   });
+
+  if (profileError) return <h1>Error loading profile: {`${profileError}`}</h1>;
+  if (profileLoading) return <h1>Loading user profile</h1>;
+  if (!profile) return <h1>No profile data</h1>;
+  if (typeof profile !== 'object' || profile instanceof Error) {
+    return <h1>Invalid profile data</h1>;
+  }
 
   // useEffect(() => {
   //   console.log('CourseForm state:', { errors, isDirty, isSubmitting });
@@ -123,7 +130,7 @@ const CourseForm = ({ course, onCancel, onSubmit }: CourseFormProps) => {
           </button>
           <button
             type="submit"
-            disabled={isSubmitting || !isAuthenticated}
+            disabled={isSubmitting || !profile.isAdmin}
             onClick={() => console.log('submit button clicked')}
             className="px-4 py-2 rounded-lg bg-blue-500 text-white font-medium hover:bg-blue-600 disabled:bg-gray-400 transition"
           >
@@ -132,9 +139,9 @@ const CourseForm = ({ course, onCancel, onSubmit }: CourseFormProps) => {
         </div>
       </form>
 
-      {!isAuthenticated && (
-        <div className="mt-4 italic text-gray-600 font-medium">
-          Must be authenticated user to edit courses.
+      {!profile.isAdmin && (
+        <div className="mt-4 text-red-600 font-medium">
+          Only administrators can edit courses.
         </div>
       )}
 
