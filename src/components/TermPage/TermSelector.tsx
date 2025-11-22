@@ -12,6 +12,7 @@ const TermSelector = ({ activeTerm, setActiveTerm }: TermSelectorProps) => {
           key={term}
           className={`btn ${term === activeTerm ? "btn-primary" : "btn-outline-primary"}`}
           onClick={() => setActiveTerm(term)}
+          data-cy={term}
         >
           {term}
         </button>
