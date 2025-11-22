@@ -34,6 +34,7 @@ const CourseCard = ({course, toggleCourse, selectedCourses}: CourseCardProps) =>
         hasConflict ? 'bg-gray-300 cursor-not-allowed opacity-50 border-gray-400' :
         'bg-white border cursor-pointer border-gray-300'
       }`}
+      data-cy="course"
       onClick={() => {if(!hasConflict || isSelected) toggleCourse(course)}}
     >
       <div className="text-xl font-semibold mb-2">
